@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { userActions } from '../_actions';
 
@@ -33,35 +34,76 @@ function LoginPage() {
             // get return url from location state or default to home page
             const { from } = location.state || { from: { pathname: "/" } };
             dispatch(userActions.login(email, password, from));
+            toast.info('Log in Successful');
+        } else {
+            toast.info('Log in Failed');
         }
     }
 
     return (
-        <div className="col-lg-8 offset-lg-2">
-            <h2>Login</h2>
-            <form name="form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Email</label>
-                    <input type="text" name="email" value={email} onChange={handleChange} className={'form-control' + (submitted && !email ? ' is-invalid' : '')} />
-                    {submitted && !email &&
-                        <div className="invalid-feedback">Email is required</div>
-                    }
+        <div className="col-md-8 offset-md-2">
+            <div className="container mx-auto">
+                <div className="row">
+                    <div className="col-sm left">
+                    <div className="card register-card mx-auto card-default align-item-center justify-content-center">
+                        <div className="card-body">
+                            <div className="d-flex justify-content-between mx-auto">
+                                <div className="p-2">
+                                    <h3 className="card-title text-center justify-content-center align-item-center">Welcome Back!</h3>
+                                    <small className="text-muted form-text align-item-center">Login & continue creating presentations.</small> 
+                                </div>
+                            </div>
+                            <div className="container-sm">
+                            <form noValidate onSubmit={handleSubmit}>
+                                    <div>
+                                        <div className="form-group ">
+                                            <label >Email</label>
+                                            <input 
+                                                type="email" 
+                                                className="form-control" 
+                                                id="email"
+                                                name="email"
+                                                autoComplete="on"
+                                                aria-describedby="emailHelp"
+                                                placeholder=""
+                                                value={email} 
+                                                onChange={handleChange} 
+                                            />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label>Password</label>
+                                            <input 
+                                            type="password" 
+                                            className="form-control" 
+                                            id="password"
+                                            name="password"
+                                            autoComplete="on"
+                                            placeholder=""
+                                            value={password} 
+                                            onChange={handleChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <small className="text-muted form-text">
+                                        Have no account? sign up <Link to="/register">here</Link>
+                                    </small>
+                                    <div className="d-flex justify-content-end">
+                                        <div className="p-2">
+                                            <button type="submit" id="signinButton" name="submit" value="Sign In" className="btn btn-warning text-white font-weight-bold">
+                                            {loggingIn && <span className="spinner-border spinner-border-sm mr-1"></span>}
+                                                LOGIN
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
                 </div>
-                <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" value={password} onChange={handleChange} className={'form-control' + (submitted && !password ? ' is-invalid' : '')} />
-                    {submitted && !password &&
-                        <div className="invalid-feedback">Password is required</div>
-                    }
-                </div>
-                <div className="form-group">
-                    <button className="btn btn-primary">
-                        {loggingIn && <span className="spinner-border spinner-border-sm mr-1"></span>}
-                        Login
-                    </button>
-                    <Link to="/register" className="btn btn-link">Register</Link>
-                </div>
-            </form>
+            </div>
+            <ToastContainer />
         </div>
     );
 }
